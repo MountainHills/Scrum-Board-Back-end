@@ -23,9 +23,14 @@ public class TaskService {
         this.taskRepository = taskRepository;
     }
 
-    // Task Queries
+    // Getting all tasks.
     public List<Task> getAllTasks() {
         return taskRepository.findAll();
+    }
+
+    // Getting single task by ID.
+    public Optional<Task> getTaskById(long taskId) {
+        return taskRepository.findById(taskId);
     }
 
     // Inserting new tasks
@@ -47,6 +52,22 @@ public class TaskService {
         taskRepository.deleteById(taskId);
     }
 
+    // Safe deleting existing tasks
+    @Transactional
+    public void softDeleteTask(long taskId) {
+        boolean exists = taskRepository.existsById(taskId);
+
+        // Checks whether a task with the given id exists.
+        Task task = taskRepository
+                .findById(taskId)
+                .orElseThrow(
+                        () -> new IllegalStateException("The task with the id = " + taskId + "doesn't exist.")
+                );
+
+        // Soft deletes the record.
+        task.setState(TaskState.SOFT_DELETED);
+    }
+
     // For updating an existing task
     @Transactional
     public void updateTask(Long taskId, String title, String description, String progress) {
@@ -56,15 +77,6 @@ public class TaskService {
                 .orElseThrow(
                         () -> new IllegalStateException("The task with the id = " + taskId + "doesn't exist.")
                 );
-
-        /*
-        * Checks whether all the other parameters are null. In this manner, it would
-        * be able to perform soft deletion by updating it's state. However, this would
-        * cause confusion issues. (Might remove.)
-        * */
-        if (title == null && description == null && progress == null) {
-            task.setState(TaskState.SOFT_DELETED);
-        }
 
         // Checks whether title change is not null, less than 0, and not equal to current title.
         if (title != null && title.length() > 0 && !Objects.equals(task.getTitle(), title)) {
