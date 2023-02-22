@@ -3,5 +3,5 @@
 Scrum board is a web application consisting of two parts:
 
  - Spring Boot backend (this)
- - [React powered HTML5 frontend](https://github.com/sAleksovski/scrum-board-frontend)
+ - [React powered HTML5 frontend](https://github.com/smnlld/scrum-board)
 
