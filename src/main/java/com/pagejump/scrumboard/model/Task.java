@@ -1,11 +1,25 @@
 package com.pagejump.scrumboard.model;
 
 import com.pagejump.scrumboard.model.enums.TaskProgress;
-import com.pagejump.scrumboard.model.enums.TaskState;
 import jakarta.persistence.*;
+import org.hibernate.annotations.Filter;
+import org.hibernate.annotations.FilterDef;
+import org.hibernate.annotations.ParamDef;
+import org.hibernate.annotations.SQLDelete;
 
 @Entity
 @Table(name = "task")
+// Annotations for Soft Deletion.
+@SQLDelete(sql = "UPDATE task SET deleted = true WHERE id = ?")
+// Annotations for displaying soft deleted tasks.
+@FilterDef(
+        name = "deletedTaskFilter",
+        parameters = @ParamDef(name = "isDeleted", type = Boolean.class)
+)
+@Filter(
+        name = "deletedTaskFilter",
+        condition = "deleted = :isDeleted"
+)
 public class Task {
     @Id
     @SequenceGenerator(
@@ -26,22 +40,20 @@ public class Task {
     private String description;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "progress", length = 20, nullable = false)
-    private TaskProgress progress;
+    @Column(name = "status", length = 20, nullable = false)
+    private TaskProgress status = TaskProgress.TODO;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "state", length = 20, nullable = false)
-    private TaskState state;
+    @Column(name = "deleted", nullable = false)
+    private boolean deleted = Boolean.FALSE;
 
+    // TODO: Add attributes CreationTimestamp and UpdateTimestamp.
 
     public Task() {
     }
 
-    public Task(String title, String description, TaskProgress progress) {
+    public Task(String title, String description) {
         this.title = title;
         this.description = description;
-        this.progress = progress;
-        this.state = TaskState.valueOf("ACTIVE");
     }
 
     public Long getId() {
@@ -64,19 +76,19 @@ public class Task {
         this.description = description;
     }
 
-    public TaskProgress getProgress() {
-        return progress;
+    public TaskProgress getStatus() {
+        return status;
     }
 
-    public void setProgress(TaskProgress progress) {
-        this.progress = progress;
+    public void setStatus(TaskProgress status) {
+        this.status = status;
     }
 
-    public TaskState getState() {
-        return state;
+    public boolean isDeleted() {
+        return deleted;
     }
 
-    public void setState(TaskState state) {
-        this.state = state;
+    public void setDeleted(boolean deleted) {
+        this.deleted = deleted;
     }
 }

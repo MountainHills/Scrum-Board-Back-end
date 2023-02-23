@@ -21,11 +21,11 @@ public class TaskController {
 
     // Viewing all tasks.
     @GetMapping
-    public List<Task> getAllTasks() {
-        return taskService.getAllTasks();
+    public List<Task> getAllTasks(@RequestParam(value = "isDeleted", required = false, defaultValue = "false") boolean isDeleted) {
+        return taskService.getAllTasks(isDeleted);
     }
 
-    // View task by Id.
+    // View active task by ID.
     @GetMapping(path = "{taskId}")
     public Optional<Task> getAllTasks(@PathVariable("taskId") Long taskId) {
         return taskService.getTaskById(taskId);
@@ -33,27 +33,21 @@ public class TaskController {
 
     // For inserting new tasks.
     @PostMapping
-    public void createNewTask(@RequestBody Task task) {
-        taskService.addNewTask(task);
+    public void createTask(@RequestBody Task task) {
+        taskService.createTask(task);
     }
 
-    // For deleting a task.
-    @DeleteMapping(path = "delete/{taskId}")
+    @DeleteMapping(path = "{taskId}")
     public void deleteTask(@PathVariable("taskId") Long taskId) {
         taskService.deleteTask(taskId);
     }
 
-    @PutMapping(path = "soft-delete/{taskId}")
-    public void safeDeleteTask(@PathVariable("taskId") Long taskId) {
-        taskService.softDeleteTask(taskId);
-    }
-
     // For updating a task.
-    @PutMapping(path = "{taskId}")
-    public void updateTask(@PathVariable("taskId") Long taskId,
-                              @RequestParam(required = false) String title,
-                              @RequestParam(required = false) String description,
-                              @RequestParam(required = false) String progress) {
-        taskService.updateTask(taskId, title, description, progress);
-    }
+//    @PutMapping(path = "{taskId}")
+//    public void updateTask(@PathVariable("taskId") Long taskId,
+//                              @RequestParam(required = false) String title,
+//                              @RequestParam(required = false) String description,
+//                              @RequestParam(required = false) String progress) {
+//        taskService.updateTask(taskId, title, description, progress);
+//    }
 }

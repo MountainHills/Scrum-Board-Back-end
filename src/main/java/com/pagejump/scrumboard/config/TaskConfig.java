@@ -18,10 +18,10 @@ public class TaskConfig {
         return args -> {
 
             // Mock Data
-            Task task1 = new Task("Do dishes", "Wash dishes for fun", TaskProgress.IN_PROGRESS);
-            Task task2 = new Task("Practice Spring Boot", "What is Liquibase?", TaskProgress.DONE);
-            Task task3 = new Task("Cook food", "I don't know", TaskProgress.TODO);
-            Task task4 = new Task("Liquibase", "What the heck", TaskProgress.FOR_REVIEW);
+            Task task1 = new Task("Do dishes", "Wash dishes for fun");
+            Task task2 = new Task("Practice Spring Boot", "What is Liquibase?");
+            Task task3 = new Task("Cook food", "I don't know");
+            Task task4 = new Task("Liquibase", "What the heck");
 
             repository.saveAll(
                     List.of(task1, task2, task3, task4)
