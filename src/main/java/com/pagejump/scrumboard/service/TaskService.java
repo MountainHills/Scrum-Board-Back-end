@@ -1,5 +1,6 @@
 package com.pagejump.scrumboard.service;
 
+import com.pagejump.scrumboard.exception.TaskNotFoundException;
 import com.pagejump.scrumboard.model.Task;
 import com.pagejump.scrumboard.repository.TaskRepository;
 import jakarta.persistence.EntityManager;
@@ -35,9 +36,12 @@ public class TaskService {
     }
 
     // Getting single task by ID.
-    // TODO: Create exception handling if the task does not exist.
     public Optional<Task> getTaskById(long taskId) {
-        return taskRepository.findById(taskId);
+        if (taskRepository.existsById(taskId)) {
+            return taskRepository.findById(taskId);
+        } else {
+            throw new TaskNotFoundException("The task with the id = " + taskId + " doesn't exist.");
+        }
     }
 
     // Inserting new tasks
@@ -48,26 +52,21 @@ public class TaskService {
 
     // Delete existing tasks
     public void deleteTask(Long taskId) {
-        boolean exists = taskRepository.existsById(taskId);
-
-        // Checks whether a task with the given id exists.
-        if (!exists) {
-            throw new IllegalStateException("The task with the id = " + taskId + " doesn't exist.");
+        if (taskRepository.existsById(taskId)) {
+            taskRepository.deleteById(taskId);
+        } else {
+            throw new TaskNotFoundException("The task with the id = " + taskId + " doesn't exist.");
         }
-
-        // Permanently deletes the record.
-        taskRepository.deleteById(taskId);
     }
 
     // For updating an existing task
-    // TODO: Exception handling for misspelled ENUM value and Task not Existing.
     @Transactional
     public Task updateTask(Long taskId, Task update) {
         // Checks whether a task with the given id exists.
         Task task = taskRepository
                 .findById(taskId)
                 .orElseThrow(
-                        () -> new IllegalStateException("The task with the id = " + taskId + "doesn't exist.")
+                        () -> new TaskNotFoundException("The task with the id = " + taskId + " doesn't exist.")
                 );
 
         // Checks whether title change is not null, less than 0, and not equal to current title.
