@@ -1,6 +1,6 @@
 package com.pagejump.scrumboard.model;
 
-import com.pagejump.scrumboard.model.enums.TaskProgress;
+import com.pagejump.scrumboard.model.enums.TaskStatus;
 import jakarta.persistence.*;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -47,12 +47,11 @@ public class Task {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false)
-    private TaskProgress status = TaskProgress.TODO;
+    private TaskStatus status = TaskStatus.TODO;
 
     @Column(name = "deleted", nullable = false)
     private boolean deleted = Boolean.FALSE;
 
-    // TODO: Add attributes CreationTimestamp and UpdateTimestamp.
     @CreationTimestamp
     @Column(name = "creationTime", updatable = false)
     private LocalDateTime creationTime;

@@ -33,8 +33,8 @@ public class TaskController {
 
     // For inserting new tasks.
     @PostMapping
-    public void createTask(@RequestBody Task task) {
-        taskService.createTask(task);
+    public Task createTask(@RequestBody Task task) {
+        return taskService.createTask(task);
     }
 
     @DeleteMapping(path = "{taskId}")
@@ -43,11 +43,9 @@ public class TaskController {
     }
 
     // For updating a task.
-//    @PutMapping(path = "{taskId}")
-//    public void updateTask(@PathVariable("taskId") Long taskId,
-//                              @RequestParam(required = false) String title,
-//                              @RequestParam(required = false) String description,
-//                              @RequestParam(required = false) String progress) {
-//        taskService.updateTask(taskId, title, description, progress);
-//    }
+    @PutMapping(path = "{taskId}")
+    public Task updateTask(@PathVariable("taskId") Long taskId,
+                              @RequestBody Task update) {
+        return taskService.updateTask(taskId, update);
+    }
 }

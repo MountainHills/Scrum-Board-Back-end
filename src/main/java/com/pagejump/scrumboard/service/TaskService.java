@@ -1,12 +1,10 @@
 package com.pagejump.scrumboard.service;
 
 import com.pagejump.scrumboard.model.Task;
-import com.pagejump.scrumboard.model.enums.TaskProgress;
 import com.pagejump.scrumboard.repository.TaskRepository;
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.EnumUtils;
 import org.hibernate.Filter;
 import org.hibernate.Session;
 import org.springframework.stereotype.Service;
@@ -24,6 +22,8 @@ public class TaskService {
     private final TaskRepository taskRepository;
     private final EntityManager entityManager;
 
+
+    // TODO: Send appropriate response message when there are no tasks.
     // Getting all tasks.
     public List<Task> getAllTasks(boolean isDeleted) {
         Session session = entityManager.unwrap(Session.class);
@@ -35,16 +35,15 @@ public class TaskService {
     }
 
     // Getting single task by ID.
-    // TODO: Ask Ma'am Jane if the API is only able to get active tasks? Meaning are we going to disregard soft deleted tasks?
+    // TODO: Create exception handling if the task does not exist.
     public Optional<Task> getTaskById(long taskId) {
         return taskRepository.findById(taskId);
     }
 
-    // TODO: After creating the task, return the task object or the task id.
     // Inserting new tasks
-    public void createTask(Task task) {
+    public Task createTask(Task task) {
         // This method takes a JSON response body containing the needed information.
-        taskRepository.save(task);
+        return taskRepository.save(task);
     }
 
     // Delete existing tasks
@@ -60,10 +59,10 @@ public class TaskService {
         taskRepository.deleteById(taskId);
     }
 
-    // TODO: Update needs to accommodate for JSON values instead of request parameters.
     // For updating an existing task
+    // TODO: Exception handling for misspelled ENUM value and Task not Existing.
     @Transactional
-    public void updateTask(Long taskId, String title, String description, String progress) {
+    public Task updateTask(Long taskId, Task update) {
         // Checks whether a task with the given id exists.
         Task task = taskRepository
                 .findById(taskId)
@@ -72,21 +71,22 @@ public class TaskService {
                 );
 
         // Checks whether title change is not null, less than 0, and not equal to current title.
-        if (title != null && title.length() > 0 && !Objects.equals(task.getTitle(), title)) {
-            task.setTitle(title);
+        if (update.getTitle() != null
+                && update.getTitle().length() > 0
+                && !Objects.equals(task.getTitle(), update.getTitle())) {
+            task.setTitle(update.getTitle());
         }
 
         // Checks whether description change is not equal to current description.
-        if (!Objects.equals(task.getDescription(), description)) {
-            task.setDescription(description);
+        if (!Objects.equals(task.getDescription(), update.getDescription())) {
+            task.setDescription(update.getDescription());
         }
 
         // Checks whether progress change is not null and must be within the choices.
-        if ((progress != null)
-                && (progress.length() > 0)
-                && EnumUtils.isValidEnum(TaskProgress.class, progress.toUpperCase())) {
-            task.setStatus(TaskProgress.valueOf(progress.toUpperCase()));
+        if (!Objects.equals(task.getStatus(), update.getStatus())) {
+            task.setStatus(update.getStatus());
         }
 
+        return task;
     }
 }
