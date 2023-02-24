@@ -4,10 +4,11 @@ import com.pagejump.scrumboard.model.Task;
 import com.pagejump.scrumboard.model.enums.TaskProgress;
 import com.pagejump.scrumboard.repository.TaskRepository;
 import jakarta.persistence.EntityManager;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.EnumUtils;
 import org.hibernate.Filter;
 import org.hibernate.Session;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,16 +17,12 @@ import java.util.Objects;
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
+@Slf4j
 public class TaskService {
 
     private final TaskRepository taskRepository;
     private final EntityManager entityManager;
-
-    @Autowired
-    public TaskService(TaskRepository taskRepository, EntityManager entityManager) {
-        this.taskRepository = taskRepository;
-        this.entityManager = entityManager;
-    }
 
     // Getting all tasks.
     public List<Task> getAllTasks(boolean isDeleted) {

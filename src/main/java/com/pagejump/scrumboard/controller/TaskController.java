@@ -2,6 +2,8 @@ package com.pagejump.scrumboard.controller;
 
 import com.pagejump.scrumboard.model.Task;
 import com.pagejump.scrumboard.service.TaskService;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -9,19 +11,17 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
+@RequiredArgsConstructor
+@Slf4j
 @RequestMapping(path = "api/v1/tasks")
 public class TaskController {
 
     private final TaskService taskService;
 
-    @Autowired
-    public TaskController(TaskService taskService) {
-        this.taskService = taskService;
-    }
-
     // Viewing all tasks.
     @GetMapping
     public List<Task> getAllTasks(@RequestParam(value = "isDeleted", required = false, defaultValue = "false") boolean isDeleted) {
+        log.info("The value of is deleted is: " + isDeleted);
         return taskService.getAllTasks(isDeleted);
     }
 
