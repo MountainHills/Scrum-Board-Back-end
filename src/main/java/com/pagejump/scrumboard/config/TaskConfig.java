@@ -9,20 +9,4 @@ import org.springframework.context.annotation.Configuration;
 import java.util.List;
 
 @Configuration
-public class TaskConfig {
-    @Bean
-    CommandLineRunner commandLineRunner(TaskRepository repository) {
-        return args -> {
-
-            // Mock Data
-            Task task1 = new Task("Do dishes", "Wash dishes for fun");
-            Task task2 = new Task("Practice Spring Boot", "What is Liquibase?");
-            Task task3 = new Task("Cook food", "I don't know");
-            Task task4 = new Task("Liquibase", "What the heck");
-
-            repository.saveAll(
-                    List.of(task1, task2, task3, task4)
-            );
-        };
-    }
-}
+public class TaskConfig { }

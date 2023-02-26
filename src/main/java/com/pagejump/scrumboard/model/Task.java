@@ -3,7 +3,6 @@ package com.pagejump.scrumboard.model;
 import com.pagejump.scrumboard.model.enums.TaskStatus;
 import jakarta.persistence.*;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

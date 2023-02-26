@@ -38,7 +38,7 @@ public class TaskController {
     // TODO: Create an exception when updating a soft deleted task.
     @PostMapping
     public ResponseEntity<Task> createTask(@RequestBody Task task) {
-        log.info("Inserting task with the following information: " + task.toString());
+        log.info("Inserting task with the following information: ");
         return new ResponseEntity<>(taskService.createTask(task), HttpStatus.CREATED);
     }
 
@@ -46,7 +46,7 @@ public class TaskController {
     public ResponseEntity<Task> deleteTask(@PathVariable("taskId") Long taskId) {
         log.info("Soft deleting task with id = " + taskId);
         taskService.deleteTask(taskId);
-        return ResponseEntity.noContent().build();
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     // For updating a task.
