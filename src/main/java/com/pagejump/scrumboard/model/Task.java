@@ -3,6 +3,9 @@ package com.pagejump.scrumboard.model;
 import com.pagejump.scrumboard.model.enums.TaskStatus;
 import jakarta.persistence.*;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.Digits;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -27,16 +30,15 @@ import java.time.LocalDateTime;
         condition = "deleted = :isDeleted"
 )
 public class Task {
+    @Digits(message = "Id should be a whole number.", integer = 3, fraction = 2)
     @Id
     @SequenceGenerator(
             name = "task_seq",
             sequenceName = "task_seq",
             allocationSize = 1
     )
-    @GeneratedValue(
-            strategy = GenerationType.SEQUENCE,
-            generator = "task_seq"
-    )
+    @Column(nullable = false)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "task_seq")
     private Long id;
 
     @Column(name = "title", nullable = false)
@@ -60,7 +62,6 @@ public class Task {
     @Column(name = "updateTime", nullable = false)
     private LocalDateTime updateTime;
 
-    // TODO: Remove this constructor after testing
     public Task(String title, String description) {
         this.title = title;
         this.description = description;

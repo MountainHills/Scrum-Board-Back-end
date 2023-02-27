@@ -1,4 +1,4 @@
-package com.pagejump.scrumboard.exception;
+package com.pagejump.scrumboard.exception.message;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
