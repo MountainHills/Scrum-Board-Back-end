@@ -30,7 +30,6 @@ import java.time.LocalDateTime;
         condition = "deleted = :isDeleted"
 )
 public class Task {
-    @Digits(message = "Id should be a whole number.", integer = 3, fraction = 2)
     @Id
     @SequenceGenerator(
             name = "task_seq",
@@ -41,7 +40,7 @@ public class Task {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "task_seq")
     private Long id;
 
-    @Column(name = "title", nullable = false)
+    @Column(name = "title", nullable = false, columnDefinition = "TEXT")
     private String title;
 
     @Column(name = "description", columnDefinition = "TEXT")

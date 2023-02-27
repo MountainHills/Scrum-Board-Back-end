@@ -53,10 +53,10 @@ public class TaskService {
     }
 
     // Getting single task by ID.
-    public Optional<TaskDTO> getTaskById(long taskId) {
+    public Optional<Task> getTaskById(long taskId) {
         if (taskRepository.existsById(taskId)) {
-            return taskRepository.findById(taskId)
-                    .map(taskDTOMapper);
+            return taskRepository.findById(taskId);
+//                    .map(taskDTOMapper);
         } else {
             throw new TaskNotFoundException("The task with the id = " + taskId + " doesn't exist.");
         }

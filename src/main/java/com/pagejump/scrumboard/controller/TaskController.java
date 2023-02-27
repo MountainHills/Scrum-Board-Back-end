@@ -31,7 +31,7 @@ public class TaskController {
 
     // View task by ID.
     @GetMapping(path = "{taskId}")
-    public Optional<TaskDTO> getAllTasks(@PathVariable("taskId") Long taskId) {
+    public Optional<Task> getAllTasks(@PathVariable("taskId") Long taskId) {
         log.info("Getting task with id = " + taskId);
         return taskService.getTaskById(taskId);
     }
