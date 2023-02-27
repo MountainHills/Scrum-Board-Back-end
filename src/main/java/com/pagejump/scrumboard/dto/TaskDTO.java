@@ -17,5 +17,6 @@ public class TaskDTO {
     private String description;
     @NotNull(message = "There should always be a Task status.")
     @NotBlank(message = "There should always be a Task status.")
+    // TODO: ENUM Custom Vlaidaotr.
     private String status;
 }

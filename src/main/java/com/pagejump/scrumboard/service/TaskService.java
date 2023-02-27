@@ -53,13 +53,12 @@ public class TaskService {
     }
 
     // Getting single task by ID.
-    public Optional<Task> getTaskById(long taskId) {
-        if (taskRepository.existsById(taskId)) {
-            return taskRepository.findById(taskId);
-//                    .map(taskDTOMapper);
-        } else {
-            throw new TaskNotFoundException("The task with the id = " + taskId + " doesn't exist.");
-        }
+    public Task getTaskById(long taskId) {
+        return taskRepository
+                .findById(taskId)
+                .orElseThrow(
+                        () -> new TaskNotFoundException("The task with the id = " + taskId + " doesn't exist.")
+                );
     }
 
     // Inserting new tasks
@@ -74,14 +73,15 @@ public class TaskService {
 
     // Delete existing tasks
     public void deleteTask(Long taskId) {
-        if (taskRepository.existsById(taskId)) {
-            if (taskRepository.safeDeletedById(taskId).isEmpty()) {
-                taskRepository.deleteById(taskId);
-            } else {
-                throw new TaskDeletedException("The task with the id = " + taskId + " is already deleted.");
-            }
+        Task task = taskRepository.findById(taskId)
+                .orElseThrow(
+                        () -> new TaskNotFoundException("The task with the id = " + taskId + " doesn't exist.")
+                );
+
+        if (!task.isDeleted()) {
+            taskRepository.deleteById(taskId);
         } else {
-            throw new TaskNotFoundException("The task with the id = " + taskId + " doesn't exist.");
+            throw new TaskDeletedException("Already deleted");
         }
     }
 
