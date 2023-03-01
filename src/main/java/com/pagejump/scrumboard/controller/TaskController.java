@@ -1,6 +1,6 @@
 package com.pagejump.scrumboard.controller;
 
-import com.pagejump.scrumboard.dto.TaskDTO;
+import com.pagejump.scrumboard.dto.TaskRequestDTO;
 import com.pagejump.scrumboard.model.Task;
 import com.pagejump.scrumboard.service.TaskService;
 import jakarta.validation.Valid;
@@ -11,7 +11,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
@@ -23,7 +22,7 @@ public class TaskController {
 
     // Viewing all tasks depending on isDeleted parameter.
     @GetMapping
-    public List<TaskDTO> getAllTasks(
+    public List<Task> getAllTasks(
             @RequestParam(value = "isDeleted", required = false, defaultValue = "false") boolean isDeleted) {
         log.info("Getting all tasks where deleted = " + isDeleted);
         return taskService.getAllTasks(isDeleted);
@@ -38,7 +37,7 @@ public class TaskController {
 
     // For inserting new tasks.
     @PostMapping
-    public ResponseEntity<Task> createTask(@RequestBody @Valid TaskDTO task) {
+    public ResponseEntity<Task> createTask(@RequestBody @Valid TaskRequestDTO task) {
         log.info("Inserting task with the following information: title = " + task.getTitle()
         + ", description = " + task.getDescription());
         return new ResponseEntity<>(taskService.createTask(task), HttpStatus.CREATED);
@@ -54,8 +53,7 @@ public class TaskController {
     // For updating a task.
     @PutMapping(path = "{taskId}")
     public ResponseEntity<Task> updateTask(@PathVariable("taskId") Long taskId,
-                              @RequestBody @Valid TaskDTO update) {
-        update.setId(taskId);
+                              @RequestBody @Valid TaskRequestDTO update) {
         log.info("Updating task id #" + taskId + " with the following information: " + update.toString());
         return new ResponseEntity<>(taskService.updateTask(taskId, update), HttpStatus.ACCEPTED);
 
