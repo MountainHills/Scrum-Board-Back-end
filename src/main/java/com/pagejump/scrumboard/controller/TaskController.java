@@ -22,10 +22,9 @@ public class TaskController {
 
     // Viewing all tasks depending on isDeleted parameter.
     @GetMapping
-    public List<Task> getAllTasks(
-            @RequestParam(value = "isDeleted", required = false, defaultValue = "false") boolean isDeleted) {
-        log.info("Getting all tasks where deleted = {}", isDeleted);
-        return taskService.getAllTasks(isDeleted);
+    public List<Task> getAllTasks() {
+        log.info("Getting all tasks whether they are deleted or not.");
+        return taskService.getAllTasks();
     }
 
     // View task by ID.
@@ -38,7 +37,8 @@ public class TaskController {
     // For inserting new tasks.
     @PostMapping
     public ResponseEntity<Task> createTask(@RequestBody @Valid TaskRequestDTO task) {
-        log.info("Inserting task with the following information title = {}, description = {}", task.getTitle(), task.getDescription());
+        log.info("Inserting task with the following information title = {}, description = {}",
+                task.getTitle(), task.getDescription());
         return new ResponseEntity<>(taskService.createTask(task), HttpStatus.CREATED);
     }
 

@@ -23,8 +23,7 @@ public class ScrumExceptionHandler extends ResponseEntityExceptionHandler {
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
 
         Map<String, String> errorMap = new HashMap<>();
-        HttpStatus badRequest = HttpStatus.BAD_REQUEST;
-
+        HttpStatus unprocessableEntity = HttpStatus.UNPROCESSABLE_ENTITY;
         ex.getBindingResult()
                 .getFieldErrors()
                 .forEach(
@@ -36,24 +35,24 @@ public class ScrumExceptionHandler extends ResponseEntityExceptionHandler {
         ValidationErrorMessage errorDetails = new ValidationErrorMessage(
                 errorMap,
                 ex.getClass().getSimpleName(),
-                badRequest,
+                unprocessableEntity,
                 LocalDateTime.now()
         );
 
-        return new ResponseEntity<>(errorDetails, badRequest);
+        return new ResponseEntity<>(errorDetails, unprocessableEntity);
     }
 
     @ExceptionHandler(value = {TaskNotFoundException.class})
     public ResponseEntity<Object> handleTaskNotFoundException(TaskNotFoundException tnfe) {
 
-        HttpStatus badRequest = HttpStatus.BAD_REQUEST;
+        HttpStatus notFound = HttpStatus.NOT_FOUND;
         ExceptionMessage exceptionMessage = new ExceptionMessage(
                 tnfe.getMessage(),
                 tnfe.getClass().getSimpleName(),
-                badRequest,
+                notFound,
                 LocalDateTime.now()
         );
-        return new ResponseEntity<>(exceptionMessage, badRequest);
+        return new ResponseEntity<>(exceptionMessage, notFound);
     }
 
     @ExceptionHandler(value = {TaskDeletedException.class})
@@ -67,18 +66,5 @@ public class ScrumExceptionHandler extends ResponseEntityExceptionHandler {
                 LocalDateTime.now()
         );
         return new ResponseEntity<>(exceptionMessage, badRequest);
-    }
-
-    @ExceptionHandler(value = {NoAvailableTaskListException.class})
-    public ResponseEntity<Object> handleNoAvailableTaskListException(NoAvailableTaskListException natle) {
-
-        HttpStatus okRequest = HttpStatus.OK;
-        ExceptionMessage exceptionMessage = new ExceptionMessage(
-                natle.getMessage(),
-                natle.getClass().getSimpleName(),
-                okRequest,
-                LocalDateTime.now()
-        );
-        return new ResponseEntity<>(exceptionMessage, okRequest);
     }
 }

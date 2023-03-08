@@ -1,7 +1,6 @@
 package com.pagejump.scrumboard.service;
 
 import com.pagejump.scrumboard.dto.TaskRequestDTO;
-import com.pagejump.scrumboard.exception.NoAvailableTaskListException;
 import com.pagejump.scrumboard.exception.TaskDeletedException;
 import com.pagejump.scrumboard.exception.TaskNotFoundException;
 import com.pagejump.scrumboard.model.Task;
@@ -23,16 +22,9 @@ public class TaskService {
     private final TaskRepository taskRepository;
 
 
-    // Getting all tasks.
-    public List<Task> getAllTasks(boolean isDeleted) {
-        List<Task> tasks = taskRepository.findAll()
-                .stream()
-                .filter(task -> task.isDeleted() == isDeleted)
-                .toList();
-
-        if (tasks.isEmpty()) throw new NoAvailableTaskListException(
-                "There are no tasks to show where isDeleted = " + isDeleted);
-
+    // Gets all tasks (both deleted and not deleted.)
+    public List<Task> getAllTasks() {
+        List<Task> tasks = taskRepository.findAll();
         return tasks;
     }
 

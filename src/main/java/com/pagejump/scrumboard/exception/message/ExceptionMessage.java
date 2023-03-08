@@ -11,6 +11,6 @@ import java.time.LocalDateTime;
 public class ExceptionMessage {
     private final String message;
     private final String exception;
-    private final HttpStatus httpStatus;
+    private final HttpStatus status;
     private final LocalDateTime timestamp;
 }
