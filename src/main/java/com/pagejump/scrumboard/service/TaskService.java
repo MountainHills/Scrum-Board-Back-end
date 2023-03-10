@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -29,7 +30,7 @@ public class TaskService {
     }
 
     // Getting single task by ID.
-    public Task getTaskById(long taskId) {
+    public Task getTaskById(UUID taskId) {
         return taskRepository
                 .findById(taskId)
                 .orElseThrow(
@@ -46,7 +47,7 @@ public class TaskService {
     }
 
     // Delete existing tasks
-    public void deleteTask(Long taskId) {
+    public void deleteTask(UUID taskId) {
         Task task = taskRepository.findById(taskId)
                 .orElseThrow(
                         () -> new TaskNotFoundException("The task with the id = " + taskId + " doesn't exist.")
@@ -61,7 +62,7 @@ public class TaskService {
 
     // For updating an existing task
     @Transactional
-    public Task updateTask(Long taskId, TaskRequestDTO update) {
+    public Task updateTask(UUID taskId, TaskRequestDTO update) {
         // Checks whether a task with the given id exists.
         Task task = taskRepository
                 .findById(taskId)

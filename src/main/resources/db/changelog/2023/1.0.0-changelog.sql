@@ -1,10 +1,8 @@
 -- liquibase formatted sql
 
 --changeset anton:1.0.0-create-task-table
-CREATE SEQUENCE  IF NOT EXISTS task_seq START WITH 1 INCREMENT BY 1;
-
 CREATE TABLE task (
-  id BIGINT NOT NULL,
+   id UUID NOT NULL,
    title TEXT NOT NULL,
    description TEXT,
    status VARCHAR(255) NOT NULL,

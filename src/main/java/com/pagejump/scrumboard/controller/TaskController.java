@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequiredArgsConstructor
@@ -29,7 +30,7 @@ public class TaskController {
 
     // View task by ID.
     @GetMapping(path = "{taskId}")
-    public Task getTaskById(@PathVariable("taskId") Long taskId) {
+    public Task getTaskById(@PathVariable("taskId") UUID taskId) {
         log.info("Getting task with id = {}", taskId);
         return taskService.getTaskById(taskId);
     }
@@ -43,7 +44,7 @@ public class TaskController {
     }
 
     @DeleteMapping(path = "{taskId}")
-    public ResponseEntity<Task> deleteTask(@PathVariable("taskId") Long taskId) {
+    public ResponseEntity<Task> deleteTask(@PathVariable("taskId") UUID taskId) {
         log.info("Soft deleting task with id = {}", taskId);
         taskService.deleteTask(taskId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -51,7 +52,7 @@ public class TaskController {
 
     // For updating a task.
     @PutMapping(path = "{taskId}")
-    public ResponseEntity<Task> updateTask(@PathVariable("taskId") Long taskId,
+    public ResponseEntity<Task> updateTask(@PathVariable("taskId") UUID taskId,
                               @RequestBody @Valid TaskRequestDTO update) {
         log.info("Updating task id = {} with the following information: {}", taskId, update.toString());
         return new ResponseEntity<>(taskService.updateTask(taskId, update), HttpStatus.ACCEPTED);

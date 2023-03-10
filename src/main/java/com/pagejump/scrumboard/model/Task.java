@@ -10,6 +10,7 @@ import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Entity
 @Table(name = "task")
@@ -20,14 +21,8 @@ import java.time.LocalDateTime;
 @SQLDelete(sql = "UPDATE task SET deleted = true WHERE id = ?")
 public class Task {
     @Id
-    @SequenceGenerator(
-            name = "task_seq",
-            sequenceName = "task_seq",
-            allocationSize = 1
-    )
-    @Column(nullable = false)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "task_seq")
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID id;
 
     @Column(name = "title", nullable = false, columnDefinition = "TEXT")
     private String title;
